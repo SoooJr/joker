@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="zh-CN">
 
 <head>
-	<link rel="bookmark"  type="image/x-icon"  href="/img/logo_joker.png"/>
-	<link rel="shortcut icon" href="/img/logo_joker.png">
-	
+	<link rel="bookmark"  type="image/x-icon"  href="/joker/img/logo_joker.png"/>
+	<link rel="shortcut icon" href="/joker/img/logo_joker.png">
+
 			    <title>
     Joker
     </title>
@@ -13,9 +13,8 @@
     <link rel="stylesheet" href="/joker/css/mic_main.css" />
     <link rel="stylesheet" href="/joker/css/dropdownMenu.css" />
     <meta name="keywords" content="joker" />
-    
-    	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-	 
+    <meta name="description" content="Joker" />
+
     <noscript>
         <link rel="stylesheet" href="/joker/css/noscript.css" />
     </noscript>
@@ -24,7 +23,10 @@
           content: ' ';
           position: fixed;
           top: 0;
-          background: url('/joker/img/bg.jpg') center 0 no-repeat;
+          background: url('/img/bg.jpg') center 0 no-repeat;
+          background-image: image-set(url('/img/bg.webp') type('image/webp'), url('/img/bg.jpg') type('image/jpeg'));
+          background-position: center 0;
+          background-repeat: no-repeat;
           right: 0;
           bottom: 0;
           left: 0;
@@ -32,28 +34,6 @@
         }
     </style>
 
-			    
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script async type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  
 
 
     <script src="/joker/js/jquery.min.js"></script>
@@ -62,9 +42,9 @@
     <script src="/joker/js/skel.min.js"></script>
     <script src="/joker/js/util.js"></script>
     <script src="/joker/js/main.js"></script>
-	
+
 <meta name="generator" content="Hexo 5.4.0"></head>
-    
+
 		<body class="is-loading">
     <!-- Wrapper 外包 s-->
     <div id="wrapper" class="fade-in overlay">
@@ -89,81 +69,75 @@
             <ul class="menu links" >
 			<!-- Homepage  主页  --> 
 			<li >
-	            <a href="/joker/" rel="nofollow">主页</a>
+	            <a href="/joker/">主页</a>
 	        </li>
 			<!-- categories_name  分类   --> 
-	        
+
 	        <li class="active">
 	            <a href="#s1">分类</a>
 	                    <ul class="submenu">
 	                        <li>
-	                        
+
 	                    </ul>
 	        </li>
-	        
+
 	        <!-- archives  归档   --> 
-	        
+
 	        
 		        <!-- Pages 自定义   -->
-		        
+
 		        <li>
-		            <a href="/about/" title="简历">
+		            <a href="/joker/about/" title="简历">
 		                简历
 		            </a>
 		        </li>
-		        
+
 		        <li>
-		            <a href="/group/" title="团队">
+		            <a href="/joker/group/" title="团队">
 		                团队
 		            </a>
 		        </li>
-		        
+
 		        <li>
-		            <a href="/gallery/" title="图库">
+		            <a href="/joker/gallery/" title="图库">
 		                图库
 		            </a>
 		        </li>
-		        
+
 		        <li>
-		            <a href="/tag/" title="标签">
+		            <a href="/joker/tag/" title="标签">
 		                标签
 		            </a>
 		        </li>
-		        
+
 
 
             </ul>
             <!-- icons 图标   -->
 			<ul class="icons">
-                    
+
                     <li>
-                        <a title="github" href="https://github.com/miccall" target="_blank" rel="noopener">
+                        <a title="github" href="https://github.com/SoooJr" target="_blank" rel="noopener">
                             <i class="icon fa fa-github"></i>
                         </a>
                     </li>
-                    
-                    <li>
-                        <a title="500px" href="http://500px.com" target="_blank" rel="noopener">
-                            <i class="icon fa fa-500px"></i>
-                        </a>
-                    </li>
-                    
+
 			</ul>
 </nav>
         <!-- Nav 导航条 end -->
         <!-- Main 主要部分 start -->
-        
+
         <!-- 文章列表   s -->
         <div id="main" style="background-color: transparent; padding:0;">
         <section class="link_container" style="margin-top: 0; background-color: transparent; ">
             <div class="link_row">
                 <!-- 文章sample  s-->
 
-                
+
                 <div class="6u 12u(narrower)">
                     <section class="link_box special">
                        <a href="/joker/2021/12/10/hello-world/">
-                        <div class="page_title" style="background-image: url();background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;">
+                        <div class="page_title" style="background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;">
                             <!--标题-->
                             <h2 class="page_title_text"> Hello World </h2>
                             <!--段落-->
@@ -177,7 +151,7 @@
                                     <!-- Category -->
                                     <span>
                             <h6>
-                            <a class="post_category-link" target="_blank" rel="noopener" href="http://localhost:4000/categories/Algorithm/">
+                            <a class="post_category-link" target="_blank" rel="noopener" href="/joker/categories/Algorithm/">
                                 </a>
                             </h6>
                         </span>
@@ -187,7 +161,7 @@
                     </section>
                 </div>
                 <!-- 文章sample  e-->
-            
+
             </div>
         </section>
         </div>
@@ -195,7 +169,7 @@
         <!-- Main 主要部分 end -->
         <!-- footer  页码 start-->
         <footer style="text-align: center; padding-top: 2em;">
-  
+
 </footer>
 
         <!-- footer  页码 end-->
@@ -203,11 +177,9 @@
                 <div id="copyright">
             <ul>
                 <li>&copy;Powered By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
-                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+                <li>Design: <a target="_blank" rel="noopener" href="http://miccall.tech" style="border-bottom: none;">miccall</a></li>
             </ul>
-            
-                <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-			
+
         </div>
         <!-- Copyright 版权 end -->
     </div>
@@ -215,5 +187,5 @@
     <!-- Scripts -->
 </body>
 
- 	
+
 </html>

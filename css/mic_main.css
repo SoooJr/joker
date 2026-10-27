@@ -1,6 +1,6 @@
 @import url(font-awesome.min.css);
 @import url("https://fonts.googleapis.com/css?family=Merriweather:300,700,300italic,700italic|Source+Sans+Pro:900");
-@font-face { font-family: FZLT; /*这里是说明调用来的字体名字*/ src: url('source/fonts/FZLT.ttf'); /*这里是字体文件路径*/ }
+@font-face { font-family: FZLT; /*这里是说明调用来的字体名字*/ src: url('../fonts/FZLT.ttf'); /*这里是字体文件路径*/ }
 /* Reset */
 
 	html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
@@ -2197,7 +2197,7 @@
 			#me .pic:before {
 				content: '';
 				position: absolute;
-				background: url("/img/me.jpg");
+				background: url("../images/me.jpg");
 				width: 100%;
 				z-index: 1;
 			}
