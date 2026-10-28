@@ -246,6 +246,26 @@
 		return SITE_BASE + path;
 	}
 
+	/* ---------------- 剪贴板 ---------------- */
+	function copyText(text) {
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			return navigator.clipboard.writeText(text);
+		}
+		return new Promise(function (resolve, reject) {
+			var ta = document.createElement('textarea');
+			ta.value = text;
+			ta.setAttribute('readonly', '');
+			ta.style.position = 'fixed';
+			ta.style.top = '-9999px';
+			document.body.appendChild(ta);
+			ta.select();
+			var ok = false;
+			try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+			document.body.removeChild(ta);
+			ok ? resolve() : reject(new Error('浏览器不支持自动复制'));
+		});
+	}
+
 	function imageFallback(path) {
 		return RAW_BASE + path;
 	}
@@ -274,6 +294,7 @@
 		imageFallback: imageFallback,
 		cacheArticles: function () { return readCache(CACHE_ARTICLES, null); },
 		cacheGallery: function () { return readCache(CACHE_GALLERY, null); },
+		copyText: copyText,
 		toBase64: utf8ToBase64,
 		bufToBase64: arrayBufferToBase64,
 		verify: function () {

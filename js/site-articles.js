@@ -235,10 +235,11 @@
 			'在 GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens 新建，' +
 			'只勾选本仓库 <b>' + S.owner + '/' + S.repo + '</b> 的 <b>Contents: Read and write</b>。' +
 			'</p>' +
-			'<div class="field"><label>个人访问令牌</label>' +
+			'<div class="field"><label>个人访问令牌' + (has ? '（当前已保存，可直接复制）' : '') + '</label>' +
 			'<input type="text" id="tk-input" placeholder="github_pat_..." value="' + esc(cur) + '"></div>' +
 			'<div class="toolbar" style="margin-bottom:0">' +
 			'<button class="btn btn-primary" id="tk-save">保存并验证</button>' +
+			(has ? '<button class="btn" id="tk-copy">复制令牌</button>' : '') +
 			(has ? '<button class="btn btn-danger" id="tk-clear">清除令牌</button>' : '') +
 			'<span class="spacer"></span><button class="btn" id="tk-cancel">关闭</button></div>' +
 			'<p class="field-hint" id="tk-msg"></p>' +
@@ -276,6 +277,13 @@
 			close();
 			state.view = 'list';
 			render();
+		};
+
+		var cpy = document.getElementById('tk-copy');
+		if (cpy) cpy.onclick = function () {
+			S.copyText(S.getToken())
+				.then(function () { msg.textContent = '✓ 令牌已复制到剪贴板'; })
+				.catch(function () { msg.textContent = '自动复制失败，请手动全选输入框内容复制'; });
 		};
 	}
 
