@@ -210,6 +210,37 @@
 		});
 	}
 
+	/* ---------------- 首页（头像 / 标题） ---------------- */
+	function loadHome() {
+		return readJson('data/home.json', null).then(function (d) {
+			if (!d || typeof d !== 'object' || Array.isArray(d)) return null;
+			writeCache('joker.cache.home', d);
+			return d;
+		});
+	}
+
+	function saveHome(data, message) {
+		writeCache('joker.cache.home', data);
+		var json = JSON.stringify(data, null, 2) + '\n';
+		return ghGetMeta('data/home.json').then(function (meta) {
+			return ghPut('data/home.json', utf8ToBase64(json),
+				message || 'content: 更新首页', meta ? meta.sha : null);
+		});
+	}
+
+	function uploadHome(id, base64, message) {
+		return ghPut('media/home/' + id + '.jpg', base64,
+			message || ('content: 更新首页照片 ' + id), null);
+	}
+
+	function deleteHomeImage(id, message) {
+		return ghGetMeta('media/home/' + id + '.jpg').then(function (meta) {
+			if (!meta) return true;
+			return ghDelete('media/home/' + id + '.jpg',
+				message || ('content: 删除首页照片 ' + id), meta.sha);
+		});
+	}
+
 	function imageUrl(path) {
 		// 优先同源（部署后最快），失败再回落到 raw
 		return SITE_BASE + path;
@@ -233,6 +264,10 @@
 		saveGallery: saveGallery,
 		loadResume: loadResume,
 		saveResume: saveResume,
+		loadHome: loadHome,
+		saveHome: saveHome,
+		uploadHome: uploadHome,
+		deleteHomeImage: deleteHomeImage,
 		uploadImage: uploadImage,
 		deleteImage: deleteImage,
 		imageUrl: imageUrl,

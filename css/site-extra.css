@@ -683,3 +683,118 @@
 
 /* 让内容与导航之间留出呼吸，并避开固定头部 */
 .page-wrap { padding-top: 1rem; }
+
+/* ---------- 首页：照片更换 ---------- */
+a.jumplink.pic.portrait-host {
+	position: relative;
+	display: block;
+}
+
+.portrait-host img {
+	transition: opacity 0.2s ease;
+}
+
+.portrait-btn {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 6;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 14px 7px 12px;
+	border: 0;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.94);
+	color: #2b3a44;
+	font-size: 0.78rem;
+	font-family: inherit;
+	letter-spacing: 0.02em;
+	line-height: 1;
+	cursor: pointer;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+	transition: background 0.18s ease, color 0.18s ease;
+}
+
+.portrait-btn:hover:not(:disabled) {
+	background: #18bfef;
+	color: #fff;
+}
+
+.portrait-btn:disabled {
+	cursor: default;
+	opacity: 0.85;
+}
+
+.portrait-btn .pb-dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #18bfef;
+	display: inline-block;
+}
+
+.portrait-btn:hover:not(:disabled) .pb-dot {
+	background: #fff;
+}
+
+.portrait-host.portrait-dragover img {
+	opacity: 0.55;
+	outline: 2px dashed #18bfef;
+	outline-offset: -6px;
+}
+
+.portrait-host.portrait-busy img {
+	opacity: 0.45;
+}
+
+/* ---------- 轻提示 ---------- */
+.jk-toast {
+	position: fixed;
+	left: 50%;
+	bottom: 28px;
+	transform: translate(-50%, 16px);
+	z-index: 9999;
+	max-width: 86vw;
+	padding: 11px 20px;
+	border-radius: 8px;
+	background: rgba(28, 34, 38, 0.94);
+	color: #fff;
+	font-size: 0.82rem;
+	line-height: 1.5;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.jk-toast.show {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.jk-toast.err {
+	background: rgba(150, 32, 32, 0.95);
+}
+
+@media screen and (max-width: 736px) {
+	.portrait-btn {
+		top: 10px;
+		right: 10px;
+		padding: 6px 12px 6px 10px;
+		font-size: 0.72rem;
+	}
+}
+
+/* 桌面端固定照片占位，换任何比例的图都不会挤乱左侧标题
+   （窄屏沿用主题的 width:100%，所以只在 >=737px 生效） */
+@media screen and (min-width: 737px) {
+	#me .pic {
+		width: 15.5em;
+	}
+
+	#me .pic img {
+		width: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+}

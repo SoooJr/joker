@@ -9,7 +9,7 @@
 
 | 路径 | 页面 | 说明 |
 |---|---|---|
-| `/joker/` | 主页 | 入口 |
+| `/joker/` | 主页 | 大标题、副标题、照片来自 `data/home.json`，站主可直接换照片 |
 | `/joker/about/` | 简历 | 数据来自 `data/resume.json`，站主可在线编辑 |
 | `/joker/articles/` | 文章 | 数据来自 `data/articles.json`，站主可在线发布 |
 | `/joker/gallery/` | 图库 | 索引 `data/gallery.json`，图片在 `media/gallery/` |
@@ -20,10 +20,12 @@
 
 ```
 data/
+├── home.json        主页：标题 / 副标题 / 照片路径
 ├── resume.json      简历数据
 ├── articles.json    文章列表（含正文）
 └── gallery.json     图库索引
 media/gallery/       图库图片文件（jpg）
+media/home/          主页照片（jpg）
 ```
 
 **读**：页面通过 `raw.githubusercontent.com` 拉取 JSON，所有访客都能看到。
@@ -93,11 +95,13 @@ python -m http.server 8701
 │   └── site-extra.css       新增组件样式（简历/文章/图库）
 ├── js/
 │   ├── site-store.js        存储层：读写仓库 JSON
+│   ├── site-home.js         主页逻辑：更换照片
 │   ├── site-articles.js     文章页逻辑
 │   ├── site-gallery.js      图库页逻辑
 │   └── site-resume.js       简历页逻辑
 ├── data/                    内容数据（网页上编辑的就是这里）
-├── media/gallery/           上传的图片
+├── media/gallery/           上传的图库图片
+├── media/home/              上传的主页照片
 └── _config.yml, source/     Hexo 源码（备用，见下方警告）
 ```
 
