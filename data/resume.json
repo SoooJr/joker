@@ -1,0 +1,15 @@
+{
+  "name": "SoooJr",
+  "role": "",
+  "avatar": "images/me.jpg",
+  "about": "",
+  "contacts": [
+    {
+      "label": "GitHub",
+      "value": "github.com/SoooJr",
+      "href": "https://github.com/SoooJr"
+    }
+  ],
+  "skills": [],
+  "timeline": []
+}
