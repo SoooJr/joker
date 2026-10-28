@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "id": "seed-pic01",
+    "name": "pic01",
+    "path": "images/pic01.jpg",
+    "created": 1639094400000
+  },
+  {
+    "id": "seed-pic02",
+    "name": "pic02",
+    "path": "images/pic02.jpg",
+    "created": 1639094401000
+  },
+  {
+    "id": "seed-pic03",
+    "name": "pic03",
+    "path": "images/pic03.jpg",
+    "created": 1639094402000
+  },
+  {
+    "id": "seed-pic04",
+    "name": "pic04",
+    "path": "images/pic04.jpg",
+    "created": 1639094403000
+  },
+  {
+    "id": "seed-pic05",
+    "name": "pic05",
+    "path": "images/pic05.jpg",
+    "created": 1639094404000
+  },
+  {
+    "id": "seed-pic06",
+    "name": "pic06",
+    "path": "images/pic06.jpg",
+    "created": 1639094405000
+  },
+  {
+    "id": "seed-pic07",
+    "name": "pic07",
+    "path": "images/pic07.jpg",
+    "created": 1639094406000
+  },
+  {
+    "id": "seed-pic08",
+    "name": "pic08",
+    "path": "images/pic08.jpg",
+    "created": 1639094407000
+  }
+]
