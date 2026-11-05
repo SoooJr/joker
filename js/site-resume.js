@@ -10,12 +10,30 @@
 	var root = document.getElementById('resume-app');
 	if (!root || !S) return;
 
-	var state = { data: null, loading: true, editing: false };
+	var state = { data: null, loading: true, editing: false, preview: '', busy: false };
 
 	function esc(s) {
 		return String(s == null ? '' : s)
 			.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 			.replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	}
+
+	function uid() {
+		return 'av' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+	}
+
+	function toast(msg, isErr) {
+		var t = document.getElementById('joker-toast');
+		if (!t) {
+			t = document.createElement('div');
+			t.id = 'joker-toast';
+			t.className = 'jk-toast';
+			document.body.appendChild(t);
+		}
+		t.className = 'jk-toast show' + (isErr ? ' err' : '');
+		t.textContent = msg;
+		clearTimeout(t._timer);
+		t._timer = setTimeout(function () { t.className = 'jk-toast'; }, isErr ? 5200 : 2600);
 	}
 
 	var DEFAULTS = {
@@ -60,9 +78,15 @@
 		}
 		html += '</div>';
 
-		html += '<div class="resume-head">' +
-			'<img class="resume-avatar" src="/joker/' + esc(d.avatar || 'images/me.jpg') + '" alt="' + esc(d.name) + '" ' +
-			'onerror="this.style.display=\'none\'">' +
+		var avatarPath = d.avatar || 'images/me.jpg';
+		var avatarHtml = '<div class="resume-avatar-wrap" id="avatar-wrap">' +
+			'<img class="resume-avatar" id="resume-avatar" ' +
+			'src="' + esc(state.preview || ('/joker/' + avatarPath)) + '" ' +
+			'data-path="' + esc(avatarPath) + '" alt="' + esc(d.name) + '">' +
+			(S.hasToken() ? '<button type="button" class="avatar-btn" id="btn-avatar"><span>更换头像</span></button>' : '') +
+			'</div>';
+
+		html += '<div class="resume-head">' + avatarHtml +
 			'<div class="resume-id">' +
 			'<h1>' + esc(d.name || '未命名') + '</h1>' +
 			(d.role ? '<p class="role">' + esc(d.role) + '</p>' : '') +
@@ -94,6 +118,156 @@
 
 		var eb = document.getElementById('btn-edit-resume');
 		if (eb) eb.onclick = function () { state.editing = true; renderEditor(); };
+
+		bindAvatar();
+	}
+
+	/* ---------------- 头像更换（站主） ---------------- */
+	function attachFallback(img) {
+		img.addEventListener('error', function () {
+			var step = parseInt(img.getAttribute('data-step') || '0', 10);
+			var path = img.getAttribute('data-path') || '';
+			if (step === 0 && path) {
+				img.setAttribute('data-step', '1');
+				img.src = S.imageFallback(path);
+			} else if (step < 2) {
+				img.setAttribute('data-step', '2');
+				img.src = '/joker/images/me.jpg';
+			}
+		});
+	}
+
+	function ensureAvatarInput() {
+		var input = document.getElementById('resume-avatar-input');
+		if (input) return input;
+		input = document.createElement('input');
+		input.type = 'file';
+		input.id = 'resume-avatar-input';
+		input.accept = 'image/*';
+		input.hidden = true;
+		input.addEventListener('change', function () {
+			if (input.files && input.files[0]) handleAvatar(input.files[0]);
+			input.value = '';
+		});
+		document.body.appendChild(input);
+		return input;
+	}
+
+	function bindAvatar() {
+		var img = document.getElementById('resume-avatar');
+		if (img) attachFallback(img);
+
+		var wrap = document.getElementById('avatar-wrap');
+		var btn = document.getElementById('btn-avatar');
+		if (!wrap || !btn) return;
+
+		btn.addEventListener('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (state.busy) return;
+			ensureAvatarInput().click();
+		});
+
+		['dragenter', 'dragover'].forEach(function (ev) {
+			wrap.addEventListener(ev, function (e) {
+				if (state.busy) return;
+				e.preventDefault();
+				e.stopPropagation();
+				wrap.classList.add('is-dragover');
+			});
+		});
+		['dragleave', 'drop'].forEach(function (ev) {
+			wrap.addEventListener(ev, function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				wrap.classList.remove('is-dragover');
+				if (ev === 'drop' && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+					if (state.busy) return;
+					handleAvatar(e.dataTransfer.files[0]);
+				}
+			});
+		});
+	}
+
+	function setAvatarBusy(on, text) {
+		state.busy = on;
+		var wrap = document.getElementById('avatar-wrap');
+		if (wrap) wrap.classList.toggle('is-busy', on);
+		var btn = document.getElementById('btn-avatar');
+		if (!btn) return;
+		btn.disabled = on;
+		var t = btn.querySelector('span');
+		if (t) t.textContent = on ? (text || '上传中…') : '更换头像';
+	}
+
+	function compressAvatar(file) {
+		return new Promise(function (resolve, reject) {
+			if (!/^image\//.test(file.type)) return reject(new Error('这不是图片文件'));
+			if (file.size > 12 * 1024 * 1024) return reject(new Error('图片超过 12MB'));
+
+			var el = new Image();
+			var url = URL.createObjectURL(file);
+			el.onload = function () {
+				URL.revokeObjectURL(url);
+				var w = el.naturalWidth, h = el.naturalHeight;
+				var side = Math.min(w, h);
+				var out = Math.min(640, side);
+
+				var cv = document.createElement('canvas');
+				cv.width = out;
+				cv.height = out;
+				var ctx = cv.getContext('2d');
+				ctx.fillStyle = '#fff';
+				ctx.fillRect(0, 0, out, out);
+				ctx.drawImage(el, (w - side) / 2, (h - side) / 2, side, side, 0, 0, out, out);
+
+				var dataUrl = cv.toDataURL('image/jpeg', 0.9);
+				resolve({ b64: dataUrl.split(',')[1], dataUrl: dataUrl });
+			};
+			el.onerror = function () { URL.revokeObjectURL(url); reject(new Error('图片无法解码')); };
+			el.src = url;
+		});
+	}
+
+	function handleAvatar(file) {
+		if (state.busy) return;
+		var d = state.data || DEFAULTS;
+		var oldPath = d.avatar || '';
+		var id = uid();
+
+		setAvatarBusy(true, '处理中…');
+
+		compressAvatar(file)
+			.then(function (out) {
+				setAvatarBusy(true, '上传中…');
+				return S.uploadAvatar(id, out.b64, 'content: 更换简历头像').then(function () {
+					var next = {};
+					Object.keys(d).forEach(function (k) { next[k] = d[k]; });
+					next.avatar = 'media/avatar/' + id + '.jpg';
+					return S.saveResume(next, 'content: 更新简历头像').then(function () {
+						return { next: next, preview: out.dataUrl };
+					});
+				});
+			})
+			.then(function (res) {
+				state.data = res.next;
+				state.preview = res.preview;
+				state.busy = false;
+				render();
+				toast('头像已更新，部署完成后全站可见（约 1 分钟）');
+
+				if (oldPath.indexOf('media/avatar/') === 0) {
+					var oldId = oldPath.replace('media/avatar/', '').replace(/\.jpg$/, '');
+					if (oldId && oldId !== id) {
+						S.deleteAvatar(oldId, 'content: 清理旧简历头像').catch(function () {});
+					}
+				}
+			})
+			.catch(function (err) {
+				state.busy = false;
+				render();
+				toast('头像更换失败：' + err.message, true);
+			});
 	}
 
 	/* ---------------- 编辑器 ---------------- */
@@ -115,7 +289,7 @@
 			'<div class="field"><label>职位 / 头衔</label><input type="text" id="r-role" value="' + esc(d.role || '') + '"></div>' +
 			'<div class="field"><label>头像路径（相对站点根）</label>' +
 			'<input type="text" id="r-avatar" value="' + esc(d.avatar || 'images/me.jpg') + '">' +
-			'<div class="field-hint">例如 images/me.jpg</div></div>' +
+			'<div class="field-hint">一般不用改：返回简历页点「更换头像」上传更省事</div></div>' +
 			'<div class="field"><label>简介</label>' +
 			'<textarea id="r-about" style="min-height:120px">' + esc(d.about || '') + '</textarea></div>' +
 			'<div class="field"><label>联系方式（每行一条：标签 | 值 | 链接）</label>' +

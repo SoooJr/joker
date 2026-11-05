@@ -20,6 +20,17 @@
 	var MAX_EDGE = 1400;
 	var QUALITY = 0.88;
 
+	// 图片加载兜底：同源 404（部署延迟）→ raw CDN → 默认头像
+	var fallbackStep = 0;
+	img.addEventListener('error', function () {
+		fallbackStep++;
+		if (fallbackStep === 1) {
+			img.setAttribute('src', S.imageFallback(state.data.portrait || 'images/me.jpg'));
+		} else if (fallbackStep === 2) {
+			img.setAttribute('src', '/joker/images/me.jpg');
+		}
+	});
+
 	var state = {
 		data: { name: '', tagline: '', portrait: 'images/me.jpg' },
 		busy: false

@@ -241,6 +241,20 @@
 		});
 	}
 
+	/* ---------------- 简历头像 ---------------- */
+	function uploadAvatar(id, base64, message) {
+		return ghPut('media/avatar/' + id + '.jpg', base64,
+			message || ('content: 更新简历头像 ' + id), null);
+	}
+
+	function deleteAvatar(id, message) {
+		return ghGetMeta('media/avatar/' + id + '.jpg').then(function (meta) {
+			if (!meta) return true;
+			return ghDelete('media/avatar/' + id + '.jpg',
+				message || ('content: 清理旧简历头像 ' + id), meta.sha);
+		});
+	}
+
 	function imageUrl(path) {
 		// 优先同源（部署后最快），失败再回落到 raw
 		return SITE_BASE + path;
@@ -288,6 +302,8 @@
 		saveHome: saveHome,
 		uploadHome: uploadHome,
 		deleteHomeImage: deleteHomeImage,
+		uploadAvatar: uploadAvatar,
+		deleteAvatar: deleteAvatar,
 		uploadImage: uploadImage,
 		deleteImage: deleteImage,
 		imageUrl: imageUrl,
